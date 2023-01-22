@@ -12,26 +12,32 @@ const ChildrenExercise = () => {
                 <code>React.Children.map</code> так и{" "}
                 <code>React.Children.toArray</code>
             </p>
-
-            <Component />
-            <Component />
-            <Component />
+            <ComponentList>
+                <Component />
+                <Component />
+                <Component />
+            </ComponentList>
         </CollapseWrapper>
     );
 };
 
-const Component = ({ children }) => {
-    const number = 1;
-
-    React.Children.map(children, (child) => {
-        console.log(child);
+const ComponentList = ({ children }) => {
+    let number = 0;
+    return React.Children.map(children, (child) => {
+        // const number = React.Children.count(children);
+        number++;
+        const config = { ...child.props, number: number };
+        return React.cloneElement(child, config);
     });
+};
 
-    return <div>{number} Компонент списка</div>;
+const Component = ({ number }) => {
+    return <div>{number}-й Компонент списка</div>;
 };
 
 Component.propTypes = {
-    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node])
+    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+    number: PropTypes.number
 };
 
 export default ChildrenExercise;
